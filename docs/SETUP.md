@@ -41,7 +41,8 @@ Create an AWS credentials file:
 mkdir -p ~/.aws
 cat > ~/.aws/credentials << EOF
 [default]
-
+aws_access_key_id = YOUR_AWS_ACCESS_KEY
+aws_secret_access_key = YOUR_AWS_SECRET_KEY
 region = us-east-1
 EOF
 ```
