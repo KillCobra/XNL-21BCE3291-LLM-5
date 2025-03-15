@@ -2,9 +2,8 @@
 
 A production-grade AWS CI/CD pipeline for deploying and managing Large Language Model applications with zero downtime, automatic scaling, and high availability.
 
-## Architecture Overview
+![WhatsApp Image 2025-03-15 at 12 52 50_da09f3ac](https://github.com/user-attachments/assets/9d6f977f-f2e6-4c42-9dfc-f06b428445d7)
 
-![Architecture Diagram](docs/images/architecture-diagram.png)
 
 This pipeline implements a modern GitOps approach to deploying LLM applications on AWS with the following features:
 
@@ -30,7 +29,8 @@ This project is structured in phases to allow incremental implementation:
 - AWS EKS clusters across multiple regions
 - CI/CD pipeline with GitHub Actions
 - Basic monitoring with Prometheus and Grafana
-
+ 
+![WhatsApp Image 2025-03-15 at 12 52 29_44c907b0](https://github.com/user-attachments/assets/caef7dc9-0090-4bef-82fc-672ebf297f04)
 
 ### Phase 2: LLM Optimization
 - NVIDIA Triton Inference Server deployment
@@ -46,6 +46,9 @@ This project is structured in phases to allow incremental implementation:
 - Edge-optimized LLM models
 - TensorFlow Lite integration
 - Edge device deployment configurations
+
+
+![WhatsApp Image 2025-03-15 at 12 52 10_e066e7b6](https://github.com/user-attachments/assets/64f0854b-0de1-4e19-8989-f88017fcfaa9)
 
 ## Project Structure
 
@@ -182,6 +185,9 @@ The pipeline includes:
 - Policy enforcement with Open Policy Agent
 - Automated security scanning
 
+![WhatsApp Image 2025-03-15 at 12 53 35_67cb6196](https://github.com/user-attachments/assets/40281393-b22a-498b-8823-0381b2b00e7f)
+![WhatsApp Image 2025-03-15 at 12 57 51_c8314bc5](https://github.com/user-attachments/assets/8747b41a-34ba-4add-8fa9-3f0747a57c36)
+
 ## Rollback Strategy
 
 In case of deployment issues:
@@ -189,6 +195,8 @@ In case of deployment issues:
 2. ArgoCD automatically reverts to the previous stable version
 3. Traffic is redirected to the stable deployment
 4. Alerts notify the team of the rollback
+
+![WhatsApp Image 2025-03-15 at 13 40 41_d3cf0b5a](https://github.com/user-attachments/assets/536dfa82-0399-4f39-8dfe-f4db2b4f58e8)
 
 ## Demo
 
