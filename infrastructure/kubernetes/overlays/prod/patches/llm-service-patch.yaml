@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: llm-service
+  namespace: llm-applications
+spec:
+  template:
+    spec:
+      containers:
+      - name: llm-service
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "500m"
+          limits:
+            memory: "2Gi"
+            cpu: "1000m"
+        env:
+        - name: ENVIRONMENT
+          value: "prod"
+        - name: LOG_LEVEL
+          valueFrom:
+            configMapKeyRef:
+              name: llm-service-config
+              key: LOG_LEVEL
+        - name: MODEL_SIZE
+          valueFrom:
+            configMapKeyRef:
+              name: llm-service-config
+              key: MODEL_SIZE 

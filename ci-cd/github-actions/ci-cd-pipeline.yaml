@@ -1,0 +1,140 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  AWS_REGION: us-east-1
+  GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  AWS_ECR_REPOSITORY: llm-service
+  GCP_GCR_REPOSITORY: llm-service
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+          
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f applications/llm-service/requirements.txt ]; then pip install -r applications/llm-service/requirements.txt; fi
+          pip install pytest pytest-cov
+          
+      - name: Run tests
+        run: |
+          pytest applications/llm-service/tests/ --cov=applications/llm-service/ --cov-report=xml
+          
+      - name: Upload coverage report
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./coverage.xml
+          fail_ci_if_error: true
+
+  build-and-push:
+    name: Build and Push
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+        
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+          
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+        
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          project_id: ${{ env.GCP_PROJECT_ID }}
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          export_default_credentials: true
+          
+      - name: Configure Docker for GCR
+        run: gcloud auth configure-docker
+        
+      - name: Build and push to AWS ECR
+        uses: docker/build-push-action@v4
+        with:
+          context: ./applications/llm-service
+          push: true
+          tags: ${{ steps.login-ecr.outputs.registry }}/${{ env.AWS_ECR_REPOSITORY }}:${{ github.sha }},${{ steps.login-ecr.outputs.registry }}/${{ env.AWS_ECR_REPOSITORY }}:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          
+      - name: Build and push to GCP GCR
+        uses: docker/build-push-action@v4
+        with:
+          context: ./applications/llm-service
+          push: true
+          tags: gcr.io/${{ env.GCP_PROJECT_ID }}/${{ env.GCP_GCR_REPOSITORY }}:${{ github.sha }},gcr.io/${{ env.GCP_PROJECT_ID }}/${{ env.GCP_GCR_REPOSITORY }}:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  deploy-dev:
+    name: Deploy to Dev
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        
+      - name: Update Kubernetes manifests
+        run: |
+          # Update image tag in kustomization.yaml
+          cd infrastructure/kubernetes/overlays/dev
+          kustomize edit set image ${AWS_ECR_REPOSITORY}=gcr.io/${GCP_PROJECT_ID}/${GCP_GCR_REPOSITORY}:${GITHUB_SHA}
+          
+      - name: Commit and push changes
+        run: |
+          git config --global user.name 'GitHub Actions'
+          git config --global user.email 'actions@github.com'
+          git add infrastructure/kubernetes/overlays/dev/kustomization.yaml
+          git commit -m "Update dev image to ${GITHUB_SHA}"
+          git push
+          
+  deploy-prod:
+    name: Deploy to Production
+    needs: deploy-dev
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://llm-service.example.com
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        
+      - name: Update Kubernetes manifests
+        run: |
+          # Update image tag in kustomization.yaml
+          cd infrastructure/kubernetes/overlays/prod
+          kustomize edit set image ${AWS_ECR_REPOSITORY}=gcr.io/${GCP_PROJECT_ID}/${GCP_GCR_REPOSITORY}:${GITHUB_SHA}
+          
+      - name: Commit and push changes
+        run: |
+          git config --global user.name 'GitHub Actions'
+          git config --global user.email 'actions@github.com'
+          git add infrastructure/kubernetes/overlays/prod/kustomization.yaml
+          git commit -m "Update prod image to ${GITHUB_SHA}"
+          git push 

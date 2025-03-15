@@ -1,0 +1,85 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: edge-llm-service
+  labels:
+    app: edge-llm-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: edge-llm-service
+  template:
+    metadata:
+      labels:
+        app: edge-llm-service
+    spec:
+      nodeSelector:
+        kubernetes.io/arch: arm64  # For Raspberry Pi or Jetson Nano
+      containers:
+      - name: edge-llm-service
+        image: ${REGISTRY_URL}/edge-llm-service:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1000m"
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 30
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 60
+        env:
+        - name: MODEL_PATH
+          value: "/models/tflite_model"
+        - name: USE_TFLITE
+          value: "true"
+        - name: LOG_LEVEL
+          value: "info"
+        volumeMounts:
+        - name: model-volume
+          mountPath: /models
+      volumes:
+      - name: model-volume
+        persistentVolumeClaim:
+          claimName: edge-model-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: edge-llm-service
+  labels:
+    app: edge-llm-service
+spec:
+  ports:
+  - port: 80
+    targetPort: 8080
+    protocol: TCP
+    name: http
+  selector:
+    app: edge-llm-service
+  type: ClusterIP
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: edge-model-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: local-storage 

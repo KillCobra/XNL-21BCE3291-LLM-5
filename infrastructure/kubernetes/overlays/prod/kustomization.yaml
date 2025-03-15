@@ -1,0 +1,23 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../base
+
+namespace: llm-applications
+
+commonLabels:
+  environment: prod
+
+patchesStrategicMerge:
+  - patches/llm-service-patch.yaml
+
+configMapGenerator:
+  - name: llm-service-config
+    literals:
+      - LOG_LEVEL=info
+      - MODEL_SIZE=large
+
+replicas:
+  - name: llm-service
+    count: 3 

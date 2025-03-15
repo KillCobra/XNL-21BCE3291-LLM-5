@@ -1,0 +1,133 @@
+apiVersion: core.kubefed.io/v1beta1
+kind: KubeFedConfig
+metadata:
+  name: kubefed
+  namespace: kube-federation-system
+spec:
+  featureGates:
+  - name: PushReconciler
+    configuration: "Enabled"
+  - name: SchedulerPreferences
+    configuration: "Enabled"
+  - name: CrossClusterServiceDiscovery
+    configuration: "Enabled"
+  - name: FederatedIngress
+    configuration: "Enabled"
+---
+apiVersion: core.kubefed.io/v1beta1
+kind: FederatedTypeConfig
+metadata:
+  name: deployments.apps
+  namespace: kube-federation-system
+spec:
+  federatedType:
+    group: types.kubefed.io
+    kind: FederatedDeployment
+    pluralName: federateddeployments
+    scope: Namespaced
+    version: v1beta1
+  propagation: Enabled
+  targetType:
+    group: apps
+    kind: Deployment
+    pluralName: deployments
+    scope: Namespaced
+    version: v1
+---
+apiVersion: core.kubefed.io/v1beta1
+kind: FederatedTypeConfig
+metadata:
+  name: services
+  namespace: kube-federation-system
+spec:
+  federatedType:
+    group: types.kubefed.io
+    kind: FederatedService
+    pluralName: federatedservices
+    scope: Namespaced
+    version: v1beta1
+  propagation: Enabled
+  targetType:
+    group: ""
+    kind: Service
+    pluralName: services
+    scope: Namespaced
+    version: v1
+---
+apiVersion: core.kubefed.io/v1beta1
+kind: ClusterPropagatedVersion
+metadata:
+  name: deployments.apps
+spec:
+  clusterVersions:
+  - clusterName: aws-cluster
+    version: "1"
+  - clusterName: gcp-cluster
+    version: "1"
+---
+apiVersion: types.kubefed.io/v1beta1
+kind: FederatedDeployment
+metadata:
+  name: llm-service
+  namespace: llm-applications
+spec:
+  placement:
+    clusters:
+    - name: aws-cluster
+    - name: gcp-cluster
+  template:
+    metadata:
+      labels:
+        app: llm-service
+    spec:
+      replicas: 2
+      selector:
+        matchLabels:
+          app: llm-service
+      template:
+        metadata:
+          labels:
+            app: llm-service
+        spec:
+          containers:
+          - name: llm-service
+            image: ${REGISTRY_URL}/llm-service:latest
+            ports:
+            - containerPort: 8080
+            resources:
+              requests:
+                memory: "512Mi"
+                cpu: "250m"
+              limits:
+                memory: "1Gi"
+                cpu: "500m"
+  overrides:
+  - clusterName: aws-cluster
+    clusterOverrides:
+    - path: "/spec/replicas"
+      value: 3
+  - clusterName: gcp-cluster
+    clusterOverrides:
+    - path: "/spec/replicas"
+      value: 2
+---
+apiVersion: types.kubefed.io/v1beta1
+kind: FederatedService
+metadata:
+  name: llm-service
+  namespace: llm-applications
+spec:
+  placement:
+    clusters:
+    - name: aws-cluster
+    - name: gcp-cluster
+  template:
+    metadata:
+      labels:
+        app: llm-service
+    spec:
+      ports:
+      - port: 80
+        targetPort: 8080
+      selector:
+        app: llm-service 

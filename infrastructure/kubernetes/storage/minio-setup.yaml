@@ -1,0 +1,186 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: minio-system
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: minio-creds
+  namespace: minio-system
+type: Opaque
+data:
+  accesskey: bWluaW9hZG1pbg==  # minioadmin
+  secretkey: bWluaW9hZG1pbg==  # minioadmin
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: minio
+  namespace: minio-system
+spec:
+  selector:
+    matchLabels:
+      app: minio
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: minio
+    spec:
+      containers:
+      - name: minio
+        image: minio/minio:RELEASE.2023-03-20T20-16-18Z
+        args:
+        - server
+        - /data
+        - --console-address
+        - ":9001"
+        env:
+        - name: MINIO_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: minio-creds
+              key: accesskey
+        - name: MINIO_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: minio-creds
+              key: secretkey
+        ports:
+        - containerPort: 9000
+          name: api
+        - containerPort: 9001
+          name: console
+        volumeMounts:
+        - name: data
+          mountPath: /data
+        readinessProbe:
+          httpGet:
+            path: /minio/health/ready
+            port: api
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /minio/health/live
+            port: api
+          initialDelaySeconds: 10
+          periodSeconds: 20
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: minio-pvc
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: minio-pvc
+  namespace: minio-system
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: standard
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: minio
+  namespace: minio-system
+spec:
+  ports:
+  - port: 9000
+    targetPort: 9000
+    protocol: TCP
+    name: api
+  - port: 9001
+    targetPort: 9001
+    protocol: TCP
+    name: console
+  selector:
+    app: minio
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: minio-setup
+  namespace: minio-system
+spec:
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+      - name: mc
+        image: minio/mc:RELEASE.2023-03-20T16-14-27Z
+        command:
+        - /bin/sh
+        - -c
+        - |
+          mc alias set minio http://minio:9000 minioadmin minioadmin;
+          mc mb minio/models;
+          mc mb minio/datasets;
+          mc mb minio/checkpoints;
+          mc admin user add minio llmservice llmservicepassword;
+          mc admin policy set minio readwrite user=llmservice;
+---
+# MinIO for cross-cloud replication
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: minio-replication-config
+  namespace: minio-system
+data:
+  replication.sh: |
+    #!/bin/sh
+    
+    # Set up MinIO clients
+    mc alias set source http://minio-source:9000 minioadmin minioadmin
+    mc alias set destination http://minio-destination:9000 minioadmin minioadmin
+    
+    # Create buckets if they don't exist
+    mc mb source/models --ignore-existing
+    mc mb destination/models --ignore-existing
+    
+    # Set up replication
+    mc replicate add source/models --remote-bucket destination/models
+    
+    # Monitor replication status
+    while true; do
+      mc replicate status source/models
+      sleep 60
+    done
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: minio-replication
+  namespace: minio-system
+spec:
+  selector:
+    matchLabels:
+      app: minio-replication
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: minio-replication
+    spec:
+      containers:
+      - name: minio-replication
+        image: minio/mc:RELEASE.2023-03-20T16-14-27Z
+        command:
+        - /bin/sh
+        - -c
+        - /scripts/replication.sh
+        volumeMounts:
+        - name: replication-config
+          mountPath: /scripts
+      volumes:
+      - name: replication-config
+        configMap:
+          name: minio-replication-config
+          defaultMode: 0755 

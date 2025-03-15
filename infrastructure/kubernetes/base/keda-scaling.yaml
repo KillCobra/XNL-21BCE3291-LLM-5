@@ -1,0 +1,65 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: llm-service-scaler
+  namespace: llm-applications
+spec:
+  scaleTargetRef:
+    name: llm-service
+  minReplicaCount: 1
+  maxReplicaCount: 10
+  pollingInterval: 15
+  cooldownPeriod: 300
+  triggers:
+  - type: prometheus
+    metadata:
+      serverAddress: http://prometheus.monitoring.svc.cluster.local:9090
+      metricName: http_requests_total
+      threshold: "10"
+      query: sum(rate(http_requests_total{app="llm-service"}[2m]))
+  - type: cpu
+    metadata:
+      type: Utilization
+      value: "70"
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: triton-inference-server-scaler
+  namespace: llm-applications
+spec:
+  scaleTargetRef:
+    name: triton-inference-server
+  minReplicaCount: 1
+  maxReplicaCount: 5
+  pollingInterval: 15
+  cooldownPeriod: 300
+  triggers:
+  - type: prometheus
+    metadata:
+      serverAddress: http://prometheus.monitoring.svc.cluster.local:9090
+      metricName: nv_inference_request_success
+      threshold: "100"
+      query: sum(rate(nv_inference_request_success{app="triton-inference-server"}[2m]))
+  - type: gpu
+    metadata:
+      type: Utilization
+      value: "80"
+---
+# GPU-aware scaling with KEDA
+apiVersion: keda.sh/v1alpha1
+kind: TriggerAuthentication
+metadata:
+  name: gpu-trigger-auth
+  namespace: llm-applications
+spec:
+  podIdentity:
+    provider: none
+---
+apiVersion: keda.sh/v1alpha1
+kind: ClusterTriggerAuthentication
+metadata:
+  name: gpu-trigger-auth
+spec:
+  podIdentity:
+    provider: none 

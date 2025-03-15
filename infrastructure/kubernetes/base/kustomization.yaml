@@ -1,0 +1,12 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - namespace.yaml
+  - llm-service.yaml
+  - triton-inference-server.yaml
+  - keda-scaling.yaml
+
+commonLabels:
+  app.kubernetes.io/part-of: llm-pipeline
+  app.kubernetes.io/managed-by: kustomize 

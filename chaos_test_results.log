@@ -1,0 +1,107 @@
+2025-03-15 12:51:00,365 - INFO - Starting CPU stress test
+2025-03-15 12:51:00,366 - INFO - Starting memory pressure test
+2025-03-15 12:51:00,366 - INFO - Starting network latency simulation
+2025-03-15 12:51:00,366 - INFO - Starting request flooding simulation
+2025-03-15 12:51:00,367 - INFO - Starting error injection
+2025-03-15 12:51:00,367 - INFO - Starting service monitoring
+2025-03-15 12:51:00,389 - INFO - Service health: OK | CPU: 0.0% | Memory: 88.0% | Avg Response: 0.012s | Success Rate: 100.0%
+2025-03-15 12:51:05,411 - INFO - Service health: OK | CPU: 26.0% | Memory: 87.7% | Avg Response: 0.011s | Success Rate: 100.0%
+2025-03-15 12:51:10,431 - INFO - Service health: OK | CPU: 21.5% | Memory: 88.7% | Avg Response: 0.011s | Success Rate: 100.0%
+2025-03-15 12:51:15,461 - INFO - Service health: OK | CPU: 13.7% | Memory: 87.8% | Avg Response: 0.014s | Success Rate: 100.0%
+2025-03-15 12:51:20,484 - INFO - Service health: OK | CPU: 14.3% | Memory: 83.6% | Avg Response: 0.014s | Success Rate: 100.0%
+2025-03-15 12:51:25,528 - INFO - Service health: OK | CPU: 13.8% | Memory: 83.6% | Avg Response: 0.017s | Success Rate: 100.0%
+2025-03-15 12:51:30,547 - INFO - Service health: OK | CPU: 12.8% | Memory: 83.6% | Avg Response: 0.016s | Success Rate: 100.0%
+2025-03-15 12:51:35,584 - INFO - Service health: OK | CPU: 28.4% | Memory: 85.2% | Avg Response: 0.017s | Success Rate: 100.0%
+2025-03-15 12:51:40,623 - INFO - Service health: OK | CPU: 19.9% | Memory: 85.0% | Avg Response: 0.019s | Success Rate: 100.0%
+2025-03-15 12:51:45,655 - INFO - Service health: OK | CPU: 13.8% | Memory: 84.5% | Avg Response: 0.019s | Success Rate: 100.0%
+2025-03-15 12:51:50,678 - INFO - Service health: OK | CPU: 14.3% | Memory: 84.7% | Avg Response: 0.019s | Success Rate: 100.0%
+2025-03-15 12:51:55,740 - INFO - Service health: OK | CPU: 18.4% | Memory: 84.3% | Avg Response: 0.019s | Success Rate: 100.0%
+2025-03-15 12:51:58,367 - INFO - Injecting CPU stress
+2025-03-15 12:52:00,761 - INFO - === CHAOS TEST SUMMARY (60s elapsed) ===
+2025-03-15 12:52:00,792 - INFO - Total Requests: 12
+2025-03-15 12:52:00,825 - INFO - Success Rate: 100.00%
+2025-03-15 12:52:00,856 - INFO - Average Response Time: 0.018s
+2025-03-15 12:52:00,888 - INFO - Failed Requests: 0
+2025-03-15 12:52:00,919 - INFO - =====================================
+2025-03-15 12:52:01,177 - INFO - Service health: OK | CPU: 24.0% | Memory: 85.0% | Avg Response: 0.040s | Success Rate: 100.0%
+2025-03-15 12:52:06,446 - INFO - Service health: OK | CPU: 33.2% | Memory: 86.0% | Avg Response: 0.058s | Success Rate: 100.0%
+2025-03-15 12:52:11,519 - INFO - Service health: OK | CPU: 37.9% | Memory: 87.3% | Avg Response: 0.059s | Success Rate: 100.0%
+2025-03-15 12:52:16,566 - INFO - Service health: OK | CPU: 20.0% | Memory: 87.4% | Avg Response: 0.059s | Success Rate: 100.0%
+2025-03-15 12:52:19,368 - INFO - Injecting network delay
+2025-03-15 12:52:21,610 - INFO - Service health: OK | CPU: 33.3% | Memory: 87.7% | Avg Response: 0.061s | Success Rate: 100.0%
+2025-03-15 12:52:22,368 - INFO - Injecting memory pressure
+2025-03-15 12:52:26,650 - INFO - Service health: OK | CPU: 67.1% | Memory: 90.8% | Avg Response: 0.061s | Success Rate: 100.0%
+2025-03-15 12:52:31,674 - INFO - Service health: OK | CPU: 37.8% | Memory: 90.4% | Avg Response: 0.059s | Success Rate: 100.0%
+2025-03-15 12:52:36,698 - INFO - Service health: OK | CPU: 18.6% | Memory: 90.4% | Avg Response: 0.058s | Success Rate: 100.0%
+2025-03-15 12:52:41,733 - INFO - Service health: OK | CPU: 16.9% | Memory: 90.2% | Avg Response: 0.059s | Success Rate: 100.0%
+2025-03-15 12:52:46,755 - INFO - Service health: OK | CPU: 20.7% | Memory: 89.8% | Avg Response: 0.059s | Success Rate: 100.0%
+2025-03-15 12:52:51,798 - INFO - Service health: OK | CPU: 19.9% | Memory: 90.2% | Avg Response: 0.041s | Success Rate: 100.0%
+2025-03-15 12:52:56,831 - INFO - Service health: OK | CPU: 18.3% | Memory: 90.0% | Avg Response: 0.023s | Success Rate: 100.0%
+2025-03-15 12:53:01,833 - INFO - === CHAOS TEST SUMMARY (121s elapsed) ===
+2025-03-15 12:53:01,833 - INFO - Total Requests: 24
+2025-03-15 12:53:01,833 - INFO - Success Rate: 100.00%
+2025-03-15 12:53:01,834 - INFO - Average Response Time: 0.036s
+2025-03-15 12:53:01,834 - INFO - Failed Requests: 0
+2025-03-15 12:53:01,834 - INFO - =====================================
+2025-03-15 12:53:01,853 - INFO - Service health: OK | CPU: 16.1% | Memory: 90.0% | Avg Response: 0.021s | Success Rate: 100.0%
+2025-03-15 12:53:06,871 - INFO - Service health: OK | CPU: 18.2% | Memory: 89.7% | Avg Response: 0.019s | Success Rate: 100.0%
+2025-03-15 12:53:11,890 - INFO - Service health: OK | CPU: 28.7% | Memory: 88.4% | Avg Response: 0.017s | Success Rate: 100.0%
+2025-03-15 12:53:16,908 - INFO - Service health: OK | CPU: 15.0% | Memory: 87.6% | Avg Response: 0.015s | Success Rate: 100.0%
+2025-03-15 12:53:21,369 - INFO - Injecting error: empty
+2025-03-15 12:53:21,943 - INFO - Service health: OK | CPU: 22.3% | Memory: 88.3% | Avg Response: 0.017s | Success Rate: 100.0%
+2025-03-15 12:53:26,987 - INFO - Service health: OK | CPU: 13.1% | Memory: 87.7% | Avg Response: 0.019s | Success Rate: 100.0%
+2025-03-15 12:53:32,020 - INFO - Service health: OK | CPU: 28.4% | Memory: 87.9% | Avg Response: 0.018s | Success Rate: 100.0%
+2025-03-15 12:53:37,041 - INFO - Service health: OK | CPU: 18.3% | Memory: 88.3% | Avg Response: 0.018s | Success Rate: 100.0%
+2025-03-15 12:53:42,076 - INFO - Service health: OK | CPU: 16.2% | Memory: 88.4% | Avg Response: 0.017s | Success Rate: 100.0%
+2025-03-15 12:53:47,103 - INFO - Service health: OK | CPU: 18.0% | Memory: 88.2% | Avg Response: 0.017s | Success Rate: 100.0%
+2025-03-15 12:53:52,124 - INFO - Service health: OK | CPU: 17.6% | Memory: 88.5% | Avg Response: 0.017s | Success Rate: 100.0%
+2025-03-15 12:53:57,159 - INFO - Service health: OK | CPU: 17.3% | Memory: 88.6% | Avg Response: 0.018s | Success Rate: 100.0%
+2025-03-15 12:54:02,160 - INFO - === CHAOS TEST SUMMARY (181s elapsed) ===
+2025-03-15 12:54:02,160 - INFO - Total Requests: 36
+2025-03-15 12:54:02,160 - INFO - Success Rate: 100.00%
+2025-03-15 12:54:02,160 - INFO - Average Response Time: 0.030s
+2025-03-15 12:54:02,160 - INFO - Failed Requests: 0
+2025-03-15 12:54:02,160 - INFO - =====================================
+2025-03-15 12:54:02,180 - INFO - Service health: OK | CPU: 17.8% | Memory: 88.2% | Avg Response: 0.018s | Success Rate: 100.0%
+2025-03-15 12:54:05,370 - INFO - Injecting CPU stress
+2025-03-15 12:54:07,413 - INFO - Service health: OK | CPU: 19.6% | Memory: 88.2% | Avg Response: 0.039s | Success Rate: 100.0%
+2025-03-15 12:54:08,476 - INFO - Injecting error: large_input
+2025-03-15 12:54:12,480 - INFO - Service health: OK | CPU: 26.1% | Memory: 89.4% | Avg Response: 0.040s | Success Rate: 100.0%
+2025-03-15 12:54:17,497 - INFO - Service health: OK | CPU: 11.8% | Memory: 88.6% | Avg Response: 0.038s | Success Rate: 100.0%
+2025-03-15 12:54:22,517 - INFO - Service health: OK | CPU: 12.3% | Memory: 88.8% | Avg Response: 0.037s | Success Rate: 100.0%
+2025-03-15 12:54:27,556 - INFO - Service health: OK | CPU: 12.5% | Memory: 86.9% | Avg Response: 0.039s | Success Rate: 100.0%
+2025-03-15 12:54:31,410 - INFO - Injecting memory pressure
+2025-03-15 12:54:32,371 - INFO - Injecting CPU stress
+2025-03-15 12:54:32,777 - INFO - Service health: OK | CPU: 12.9% | Memory: 86.4% | Avg Response: 0.057s | Success Rate: 100.0%
+2025-03-15 12:54:38,022 - INFO - Service health: OK | CPU: 17.8% | Memory: 85.9% | Avg Response: 0.075s | Success Rate: 100.0%
+2025-03-15 12:54:43,260 - INFO - Service health: OK | CPU: 31.3% | Memory: 87.4% | Avg Response: 0.094s | Success Rate: 100.0%
+2025-03-15 12:54:48,323 - INFO - Service health: OK | CPU: 32.6% | Memory: 88.9% | Avg Response: 0.095s | Success Rate: 100.0%
+2025-03-15 12:54:53,340 - INFO - Service health: OK | CPU: 16.4% | Memory: 88.8% | Avg Response: 0.095s | Success Rate: 100.0%
+2025-03-15 12:54:57,819 - INFO - Injecting error: malformed
+2025-03-15 12:54:58,369 - INFO - Service health: OK | CPU: 17.8% | Memory: 88.9% | Avg Response: 0.075s | Success Rate: 100.0%
+2025-03-15 12:55:03,370 - INFO - === CHAOS TEST SUMMARY (243s elapsed) ===
+2025-03-15 12:55:03,370 - INFO - Total Requests: 48
+2025-03-15 12:55:03,370 - INFO - Success Rate: 100.00%
+2025-03-15 12:55:03,371 - INFO - Average Response Time: 0.042s
+2025-03-15 12:55:03,371 - INFO - Failed Requests: 0
+2025-03-15 12:55:03,372 - INFO - =====================================
+2025-03-15 12:55:03,410 - INFO - Service health: OK | CPU: 18.9% | Memory: 88.9% | Avg Response: 0.074s | Success Rate: 100.0%
+2025-03-15 12:55:08,429 - INFO - Service health: OK | CPU: 17.4% | Memory: 88.9% | Avg Response: 0.074s | Success Rate: 100.0%
+2025-03-15 12:55:12,372 - INFO - Injecting CPU stress
+2025-03-15 12:55:13,653 - INFO - Service health: OK | CPU: 24.8% | Memory: 89.5% | Avg Response: 0.093s | Success Rate: 100.0%
+2025-03-15 12:55:18,692 - INFO - Service health: OK | CPU: 21.5% | Memory: 89.1% | Avg Response: 0.091s | Success Rate: 100.0%
+2025-03-15 12:55:23,731 - INFO - Service health: OK | CPU: 12.9% | Memory: 89.0% | Avg Response: 0.073s | Success Rate: 100.0%
+2025-03-15 12:55:28,749 - INFO - Service health: OK | CPU: 10.5% | Memory: 88.9% | Avg Response: 0.054s | Success Rate: 100.0%
+2025-03-15 12:55:33,777 - INFO - Service health: OK | CPU: 10.9% | Memory: 89.2% | Avg Response: 0.036s | Success Rate: 100.0%
+2025-03-15 12:55:38,795 - INFO - Service health: OK | CPU: 10.4% | Memory: 88.6% | Avg Response: 0.034s | Success Rate: 100.0%
+2025-03-15 12:55:43,813 - INFO - Service health: OK | CPU: 14.1% | Memory: 88.4% | Avg Response: 0.034s | Success Rate: 100.0%
+2025-03-15 12:55:48,839 - INFO - Service health: OK | CPU: 12.3% | Memory: 88.5% | Avg Response: 0.034s | Success Rate: 100.0%
+2025-03-15 12:55:53,870 - INFO - Service health: OK | CPU: 12.5% | Memory: 88.4% | Avg Response: 0.034s | Success Rate: 100.0%
+2025-03-15 12:55:58,897 - INFO - Service health: OK | CPU: 11.8% | Memory: 88.5% | Avg Response: 0.035s | Success Rate: 100.0%
+2025-03-15 12:56:03,898 - INFO - === CHAOS TEST SUMMARY (303s elapsed) ===
+2025-03-15 12:56:03,898 - INFO - Total Requests: 60
+2025-03-15 12:56:03,914 - INFO - Success Rate: 100.00%
+2025-03-15 12:56:03,914 - INFO - Average Response Time: 0.040s
+2025-03-15 12:56:03,916 - INFO - Failed Requests: 0
+2025-03-15 12:56:03,916 - INFO - =====================================
+2025-03-15 12:57:24,369 - INFO - Chaos testing completed

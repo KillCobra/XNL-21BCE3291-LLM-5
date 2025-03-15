@@ -1,0 +1,41 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: llm-service-dev
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/your-username/XNL-21BCE3291-LLM-5.git
+    targetRevision: HEAD
+    path: infrastructure/kubernetes/overlays/dev
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: llm-applications
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: llm-service-prod
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/your-username/XNL-21BCE3291-LLM-5.git
+    targetRevision: HEAD
+    path: infrastructure/kubernetes/overlays/prod
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: llm-applications
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true 
